@@ -128,9 +128,7 @@ EXPOSE  8126
 EXPOSE 81
 
 # Prism ws port
-EXPOSE 8888
-
-
+EXPOSE 8888/udp
 
 # -------- #
 #   Run!   #
