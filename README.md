@@ -9,7 +9,9 @@ To run:
 ### Building the image yourself ###
 
 cd docker-grafana-graphite
+
 sudo docker build .
+
 docker run -d -p 80:80 -p 8125:8125/udp -p 8126:8126 freshly_created_docker_image_id
 
 ### Now go explore! ###
