@@ -12,6 +12,16 @@ RUN     apt-get -y update &&\
 	python-memcache python-ldap python-cairo python-pysqlite2 python-support python-pip \
 	gunicorn supervisor nginx-light git wget curl openjdk-7-jre build-essential python-dev libffi-dev
 
+
+# Install java 8
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer && \
+  rm -rf /var/lib/apt/lists/* && \
+rm -rf /var/cache/oracle-jdk8-installer
+
 RUN     pip install Twisted==13.2.0
 RUN     pip install pytz
 RUN	curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -93,6 +103,13 @@ ADD     ./nginx/prism.conf /etc/nginx/conf.d/prism.conf
 ADD     ./nginx/mime.types /etc/nginx/mime.types
 ADD     ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Configure prism
+
+RUN     mkdir /etc/prism
+RUN     mkdir /etc/prism/backend
+ADD     ./prism/* /etc/prism/backend/
+ADD     ./prism/prism.jar /etc/prism/prism.jar
+
 
 # ---------------- #
 #   Expose Ports   #
@@ -109,6 +126,9 @@ EXPOSE  8126
 
 # Graphite web port
 EXPOSE 81
+
+# Prism ws port
+EXPOSE 8888
 
 
 
